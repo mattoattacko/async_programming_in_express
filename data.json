@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Dean Winchester",
+      "username": "Impala67",
+      "bio": "Renown ghost hunter"
+    },
+    {
+      "id": 2,
+      "name": "Charles",
+      "username": "silverpothos4ever",
+      "bio": "A majestic houseplant who lives in the Treehouse office"
+    },
+    {
+      "id": 3,
+      "name": "Bugs Bunny",
+      "username": "bugs1234",
+      "bio": "A famous carrot enthusiast"
+    },
+    {
+      "id": 4,
+      "name": "Squash",
+      "username": "kingcharlesdog",
+      "bio": "The cutest office dog at Treehouse"
+    }
+  ]
+}
