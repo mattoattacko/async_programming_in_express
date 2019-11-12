@@ -17,6 +17,7 @@ function getUsers(cb){
   });
 }
 
+// currently an empty express route
 app.get('/', (req,res) => {
   
 }); 
