@@ -17,9 +17,19 @@ function getUsers(cb){
   });
 }
 
-// currently an empty express route
+// We pass getUsers an anon function with err and users as parameters.
+// If there is an error, we render an error page, passing the error to the error template. 
+// Else if everything goes as expected, render the index page. We also give the template a title. 
+// We need to provide the template the user data, so we name the property "users" in reference to the "users" from the index.pug. For the value, we reference "users.users"
+// "users" represents the data that users has retrived and passed to us via the above callback function. We are trying to access the "users" [array] through the property "users", which is why we are using "users.users". 
 app.get('/', (req,res) => {
-  
+  getUsers((err, users) => {
+    if (err) {
+      res.render('error', {error:err});
+    } else {
+      res.render('index', {title: "Users", users: users.users})
+    }
+  });
 }); 
 
 
