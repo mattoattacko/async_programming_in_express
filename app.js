@@ -62,14 +62,28 @@ function getUsers() {
 // .then() method accepts a function, so we pass it an anon function. Inside the function we define param users to gain access to the data provided by "getUsers" (which either provides the data or gives us an error)
 // And now that we've called getUsers and have the users (in .then(users)), now we render the page. 
 // if getUsers encounters an error, its passed to the catch() method, which accepts a callback to run when errors are caught. We define the parameter for the error, and render the error page. 
-app.get('/', (req,res) => {
-  getUsers()
-    .then((users) => {
-      res.render('index' , {title: "Users", users: users.users});
-    })
-    .catch((err) => {
-      res.render('error', {error: err});
-    });
+// app.get('/', (req,res) => {
+//   getUsers()
+//     .then((users) => {
+//       res.render('index' , {title: "Users", users: users.users});
+//     })
+//     .catch((err) => {
+//       res.render('error', {error: err});
+//     });
+// });
+
+// Using Async/Await
+// We store the value that "getUsers()" returns to a variable. We dont need to change our "getUsers()" function because it already returns a promise needed for "await"
+// We use "res.render" to render the information to an html page
+// Like the "then()" method, using "await" we are ensuring that the next line of code does not execute until we have our users info. 
+// We wrap the code in a try/catch block to handle errors
+app.get('/', async (req,res) => {
+  try {
+    const users = await getUsers();
+    res.render('index' , {title: "Users", users: users.users});
+  } catch(err) {
+    res.render('error', {error: err});
+  }
 });
 
 app.listen(3000, () => console.log('App listening on port 3000!'));
