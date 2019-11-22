@@ -8,6 +8,23 @@ app.set('view engine', 'pug');
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static('public'));
 
+// This is our middleware that wraps each of our routes automatically in a "try/catch" block. 
+// Takes a callback
+// Inside our "asyncHandler" function, we return a function an async function that will serve as our route handlers callback. So it will take the "req, res, next" parameters.
+// In our try block, we await whatever function we have passed to the "asyncHandler" w/ the normal route handling parameters. 
+// So all we did was create a function that wraps around our normal route handling function. To this function we can pass all the code that we would normally pass in our Express route handler callback. 
+// In the catch block, we catch any errors and render out our error page. 
+// With this mw, we no longer need to inlcude this error handling code in every single route. 
+function asyncHandler(cb) {
+  return async (req, res, next) => {
+    try {
+      await cb(req, res, next);
+    } catch(err) {
+        res.render('error', {error: err});
+    }
+  }
+}
+
 //CALL BACKS
 // function getUsers(cb){
 //   fs.readFile('data.json', 'utf8', (err, data) => {
@@ -77,13 +94,26 @@ function getUsers() {
 // We use "res.render" to render the information to an html page
 // Like the "then()" method, using "await" we are ensuring that the next line of code does not execute until we have our users info. 
 // We wrap the code in a try/catch block to handle errors
-app.get('/', async (req,res) => {
-  try {
-    const users = await getUsers();
-    res.render('index' , {title: "Users", users: users.users});
-  } catch(err) {
-    res.render('error', {error: err});
-  }
-});
+
+// Edit: to reduce repepition, we made some middleware above to wrap each of our routes in a "try/catch" block. Hence the commented out code here. 
+// app.get('/', async (req,res) => {
+//   try {
+//     const users = await getUsers();
+//     res.render('index' , {title: "Users", users: users.users});
+//   } catch(err) {
+//     res.render('error', {error: err});
+//   }
+// });
+
+// We will use the "asyncHandler" middleware from above here, instaed of aboves "try/catch" block. 
+// "asyncHandler" will become the callback in our get route. 
+// The code we use above in the try/catch block will be the callback from asyncHandler
+/**
+ * This is a good example of using ASYNC/AWAIT
+ */
+app.get('/', asyncHandler(async (req, res) => {
+  const users = await getUsers();
+  res.render('index' , {title: "Users", users: users.users});
+}))
 
 app.listen(3000, () => console.log('App listening on port 3000!'));
